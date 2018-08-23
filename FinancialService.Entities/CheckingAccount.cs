@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace FinancialService.Entities
 {
-    public class Class1
+    public class CheckingAccount : Account
     {
+        public const int NoMonthlyFreeTransactions = 20;
     }
 }
