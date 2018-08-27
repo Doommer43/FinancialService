@@ -8,11 +8,39 @@ namespace FinancialService.Entities
 {
     public abstract class Account
     {
-        public Customer Owner { get; private set; }
-        public decimal Balance { get; private set; }
-        public string AccountNumber { get; private set; }
-        public IReadOnlyCollection<Transaction> Transactions { get; private set; }
+        private decimal balance;
+        private string accountNumber;
+        private IReadOnlyCollection<Transaction> transactions;
+        private Customer customer;
 
+        protected Account(string accountNumber, Customer customer, decimal balance = 0)
+        {
+            Balance = balance;
+            AccountNumber = accountNumber;
+            this.customer = customer;
+        }
+
+        #region Properties
+        public IReadOnlyCollection<Transaction> Transactions
+        {
+            get { return transactions; }
+            private set { transactions = value; }
+        }
+
+
+        public string AccountNumber
+        {
+            get { return accountNumber; }
+            private set { accountNumber = value; }
+        }
+
+        public decimal Balance
+        {
+            get { return balance; }
+            private set { balance = value; }
+        }
+        #endregion
+        
         public bool Desposit (Transaction t)
         {
             throw new NotImplementedException();
@@ -23,8 +51,9 @@ namespace FinancialService.Entities
             if(t.Amount > Balance)
             {
                 Balance -= t.Amount;
+                return true;
             }
-            throw new NotImplementedException();
+            return false;
         }
 
         public decimal CalculateCostOfMonth(Month month)
@@ -34,7 +63,7 @@ namespace FinancialService.Entities
             {
                 if((Month)t.DateTimeOfTransaction.Month == month)
                 {
-                    cost += Owner.TransactionCost;
+                    cost += t.TransactionCost;
                 }
             }
             return cost;

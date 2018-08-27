@@ -8,6 +8,17 @@ namespace FinancialService.Entities
 {
     public class CheckingAccount : Account
     {
-        public const int NoMonthlyFreeTransactions = 20;
+        private const int NoMonthlyFreeTransactions = 20;
+        public Customer customer;
+
+        public CheckingAccount(string accountnumber, Customer customer) : base (accountnumber, customer)
+        {
+            this.customer = customer;
+        }
+
+        public CheckingAccount(string accountnumber, Customer customer, decimal balance) : base(accountnumber, customer, balance)
+        {
+
+        }
     }
 }

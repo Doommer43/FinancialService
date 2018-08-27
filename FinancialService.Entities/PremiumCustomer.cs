@@ -8,7 +8,12 @@ namespace FinancialService.Entities
 {
     public class PremiumCustomer : Customer
     {
-        public override decimal TransactionCost { get; }
-        public override decimal MonthlyAccountFee { get; }
+        public PremiumCustomer(string name, string cPR) : base(name, cPR)
+        {
+
+        }
+
+        public override decimal TransactionCost => 1.2M;
+        public override decimal MonthlyAccountFee => 12;
     }
 }

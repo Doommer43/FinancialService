@@ -8,22 +8,20 @@ namespace FinancialService.Entities
 {
     public class Customer
     {
-        public Customer(string name, string cPR, IReadOnlyCollection<Account> accounts, decimal transactionCost = (decimal)1.95, decimal monthlyAccountFee = 15)
+        private string cpr;
+        private string name;
+        private IReadOnlyCollection<Account> accounts;
+        public Customer(string name, string cPR)
         {
-            TransactionCost = transactionCost;
-            MonthlyAccountFee = monthlyAccountFee;
             CPR = cPR;
             Name = name;
-            Accounts = accounts;
         }
-
-        public virtual decimal TransactionCost { get; }
-        public virtual decimal MonthlyAccountFee { get; }
-        public string CPR { get; }
-        public string Name { get; set; }
-        public IReadOnlyCollection<Account> Accounts { get; }
-
-
+        
+        public virtual decimal TransactionCost { get => 1.95M; }
+        public virtual decimal MonthlyAccountFee { get => 15; }
+        public string Name { get => name; set => name = value; }
+        public string CPR { get => name; private set => name = value; }
+        public IReadOnlyCollection<Account> Accounts { get => accounts; private set => accounts = value; }
 
         public decimal CalculateCostOfMonth (Month month)
         {
@@ -34,6 +32,36 @@ namespace FinancialService.Entities
                 cost += (acc.CalculateCostOfMonth(m) * TransactionCost);
             }
             return cost;
+        }
+
+        public bool AddAccount(int type, string number)
+        {
+            switch (type)
+            {
+                case 1:
+                    SavingAccount sacc = new SavingAccount(number, this, 8);
+                    break;
+                case 2:
+                    CheckingAccount cacc = new CheckingAccount(number, this);
+                    break;
+                default:
+                    return false;
+            } return true;
+        }
+        public bool AddAccount(int type, string number, decimal balance)
+        {
+            switch (type)
+            {
+                case 1:
+                    SavingAccount sacc = new SavingAccount(number, this, 8, balance);
+                    break;
+                case 2:
+                    CheckingAccount cacc = new CheckingAccount(number, this, balance);
+                    break;
+                default:
+                    return false;
+            }
+            return true;
         }
     }
 }
